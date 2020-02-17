@@ -12,8 +12,10 @@
 <body>
     <div id="app">
         <topmenu></topmenu>
-        <b-container fluid>
-            @yield('content')
+        <b-container class="bg-light">
+            <div class="px-3 py-3">
+                @yield('content')
+            </div>
         </b-container>
     </div>
 </body>

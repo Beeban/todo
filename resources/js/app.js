@@ -4,18 +4,19 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-import Topmenu from "./components/Topmenu";
+import Topmenu from './components/Topmenu';
+import PageHeading from './components/PageHeading';
 
-require("./bootstrap");
-window.Vue = require("vue");
+require('./bootstrap');
+window.Vue = require('vue');
 
-import { BootstrapVue } from "bootstrap-vue";
+import { BootstrapVue } from 'bootstrap-vue';
 
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 
 const app = new Vue({
-    el: "#app",
+    el: '#app',
 
-    components: { Topmenu }
+    components: { Topmenu, PageHeading },
 });
