@@ -11,6 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/organization', [App\Http\Controllers\OrganizationController::class, 'index']);
+
+
