@@ -11,6 +11,11 @@
 |
  */
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LegalController;
 
-Route::resource('organizations', OrganizationController::class)->only(['index']);
+
+Route::get('/', [HomeController::class, 'index']);
+
+Route::resource('legals', LegalController::class)->only(['index']);
+Route::get('legals/find', [LegalController::class, 'findLegal']);

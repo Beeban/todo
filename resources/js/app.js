@@ -6,6 +6,7 @@
 
 import Topmenu from './components/Topmenu';
 import PageHeading from './components/PageHeading';
+import LegalSearchForm from './components/legal/LegalSearchForm';
 
 require('./bootstrap');
 window.Vue = require('vue');
@@ -18,5 +19,5 @@ Vue.use(BootstrapVue);
 const app = new Vue({
     el: '#app',
 
-    components: { Topmenu, PageHeading },
+    components: { Topmenu, PageHeading, LegalSearchForm },
 });
