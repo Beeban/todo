@@ -21,4 +21,9 @@ mix.webpackConfig({
             '@components': path.resolve(__dirname, './resources/js/components'),
         },
     },
+    devServer: {
+        proxy: {
+            '*': 'http://localhost:8000',
+        },
+    },
 });

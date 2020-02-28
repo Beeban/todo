@@ -17,17 +17,22 @@ class ResponseMacroServiceProvider extends ServiceProvider
     {
         $factory->macro('success', function ($data = []) use ($factory) {
             $pagination = [];
+
             if (is_object($data)) {
                 try {
                     $pagination = [
                         'page' => $data->currentPage(),
                         'perPage' => (int) $data->perPage(),
                         'totalAmount' => $data->total(),
-                        'lastPage' => $data->lastPage()
+                        'lastPage' => $data->lastPage(),
                     ];
                 } catch (Throwable $e) {
                     //$data object has no pagination
                 }
+            }
+
+            if (method_exists($data, 'toArray')) {
+                $data = $data->toArray(true);
             }
 
             $format = [
