@@ -1,10 +1,14 @@
 import axios from 'axios';
+import { Toast } from '@utils/Toast';
 
 const domain = process.env.MIX_API_DOMAIN;
 
 export const connection = axios.create({
     //withCredentials: true,
     baseURL: ``,
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+    },
 });
 
 connection.interceptors.response.use(
@@ -12,7 +16,7 @@ connection.interceptors.response.use(
         const { data } = response;
 
         if (data.success === false) {
-            data.errors.forEach(err => Toast.error(err));
+            data.errors.forEach((err) => Toast.error(err));
             return Promise.reject();
         }
 
@@ -26,8 +30,8 @@ connection.interceptors.response.use(
         if (response.status === 401) {
             //redirectToAuth();
         }
-        console.log(message);
-        // Toast.error(message);
+        //console.log(message);
+        //Toast.error(message);
         return Promise.reject(response);
     }
 );
