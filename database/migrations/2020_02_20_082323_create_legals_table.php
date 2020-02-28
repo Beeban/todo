@@ -19,11 +19,13 @@ class CreateLegalsTable extends Migration
             $table->string('full_name');
             $table->string('inn');
             $table->string('ogrn');
-            $table->string('kpp');
-            $table->string('opp');
+            $table->string('kpp')->nullable();
+            $table->string('opp')->nullable();
             $table->string('address');
             $table->unsignedInteger('signer_id')->nullable();
             $table->timestamps();
+
+            $table->unique(['inn', 'kpp']);
         });
     }
 
