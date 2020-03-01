@@ -1,11 +1,7 @@
 <template>
     <b-table-simple caption-top small>
         <caption>
-            <b-row class="justify-content-between">
-                Контакты
-                <b-button class="pull-right light" size="sm" @click="addContact">Добавить</b-button>
-                
-            </b-row>
+            <b-col>Контакты</b-col>
         </caption>
         <b-thead>
             <b-tr>
@@ -14,6 +10,7 @@
                 <b-th>Телефон</b-th>
                 <b-th>Почта</b-th>
                 <b-th>Подписант</b-th>
+                <b-th></b-th>
             </b-tr>
         </b-thead>
         <b-tbody>
@@ -30,7 +27,19 @@
                 <b-td>
                     <b-input size="sm" :value="contact.email" @input="(name) => updateValue({ name }, index)"></b-input>
                 </b-td>
-                <b-td><b-checkbox></b-checkbox></b-td>
+                <b-td>
+                    <b-radio name="signer"></b-radio>
+                </b-td>
+                <b-td>
+                    <b-button size="sm" variant="danger" @click="() => deleteContact(index)">
+                        <b-icon-x-circle size="lg"></b-icon-x-circle>
+                    </b-button>
+                </b-td>
+            </b-tr>
+            <b-tr>
+                <b-td colspan="100%">
+                    <b-button variant="success" size="sm" @click="addContact">Добавить</b-button>
+                </b-td>
             </b-tr>
         </b-tbody>
     </b-table-simple>
@@ -52,12 +61,17 @@ export default {
     methods: {
         updateValue(value, index) {
             const contacts = this.contacts.map((contact, contactIndex) => (contactIndex === index ? { ...contact, ...value } : contact));
-            this.$emit('upate', contacts);
+            this.$emit('update', contacts);
         },
 
         addContact() {
             const contacts = [...this.contacts, emptyContact];
-            this.$emit('upate', contacts);
+            this.$emit('update', contacts);
+        },
+
+        deleteContact(index) {
+            const contacts = this.contacts.filter((_, contactIndex) => index !== contactIndex);
+            this.$emit('update', contacts);
         },
     },
 };

@@ -13,9 +13,12 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LegalController;
+use App\Http\Controllers\SearchController;
 
 Route::get('/', [HomeController::class, 'index']);
 
 Route::resource('legals', LegalController::class)->only(['index', 'update', 'store', 'show']);
 
-Route::get('legals/find', [LegalController::class, 'findLegal']);
+Route::group(['prefix' => 'search'], function () {
+    Route::get('legal', [SearchController::class, 'findLegal']);
+});

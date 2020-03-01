@@ -13,7 +13,7 @@ class LegalContactDTO extends DataTransferObject
     public $position;
     public $legal_id;
 
-    public static function fromDadataRequest(array $params)
+    public static function fromDadataResponse(array $params)
     {
         return new self([
             'name' => $params['data']['management']['name'],

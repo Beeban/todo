@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Contracts\View\Factory as ViewFactory;
+use Illuminate\Http\Response;
 use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
@@ -60,16 +61,16 @@ class ResponseMacroServiceProvider extends ServiceProvider
             return $factory->make($format);
         });
 
-        $factory->macro('error', function ($error, $code = 200) use ($factory) {
+        $factory->macro('error', function ($error, $code = null) use ($factory) {
             if (is_string($error)) {
-                $error = ['message' => $error];
+                $error = ['message' => $error, 'code' => $code];
             }
 
             $format = [
                 'success' => false,
                 'error' => $error,
             ];
-            return $factory->make($format, $code);
+            return $factory->make($format, Response::HTTP_OK);
         });
     }
 

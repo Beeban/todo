@@ -12,11 +12,15 @@ class LegalCollectionDTO extends DataTransferObjectCollection
         return parent::current();
     }
 
-    public static function fromDadataRequest(array $data): LegalCollectionDTO
+    public static function fromDadataResponse(array $response): LegalCollectionDTO
     {
         $collection = [];
-        foreach ($data as $item) {
-            $collection[] = LegalDTO::fromDadataRequest($item);
+        if (isset($response['data'])) {
+            $collection[] = LegalDTO::fromDadataResponse($response);
+        } else {
+            foreach ($response as $item) {
+                $collection[] = LegalDTO::fromDadataResponse($item);
+            }
         }
         return new self($collection);
     }

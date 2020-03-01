@@ -11,7 +11,7 @@
     </b-row>
     <br>
     @if($legals->count())
-    <legals-table class="col" :legals="{{json_encode($legals)}}"></legals-table>
+    <legals-table :value="{{json_encode($legals)}}"></legals-table>
     @else
 
     @endif

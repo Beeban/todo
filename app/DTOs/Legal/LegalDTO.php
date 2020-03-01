@@ -18,7 +18,7 @@ class LegalDTO extends DataTransferObject
     public $signer_id;
     public $contacts;
 
-    public static function fromDadataRequest(array $params)
+    public static function fromDadataResponse(array $params)
     {
         return new self([
             'name' => $params['data']['name']['short_with_opf'],
@@ -28,7 +28,7 @@ class LegalDTO extends DataTransferObject
             'kpp' => $params['data']['kpp'],
             'opp' => $params['data']['opp'] ?? null,
             'address' => $params['data']['address']['value'] ?? null,
-            'contacts' => LegalContactCollectionDTO::fromDadataRequest([$params]),
+            'contacts' => LegalContactCollectionDTO::fromDadataResponse([$params]),
         ]);
     }
 }

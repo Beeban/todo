@@ -10,10 +10,9 @@
                 placeholder="введите ИНН или ОГРН"
             ></b-form-input>
             <b-input-group-append>
-                <b-button :disabled="!query" @click="findLegal" variant="primary ">
-                    <b-spinner small v-if="loading"></b-spinner>
-                    <b-icon v-else icon="search"></b-icon>
-                </b-button>
+                <loading-button :loading="loading" :disabled="!query" @click="findLegal" variant="primary ">
+                    <b-icon icon="search"></b-icon>
+                </loading-button>
             </b-input-group-append>
         </b-input-group>
 
@@ -24,13 +23,12 @@
 </template>
 
 <script>
-import { LegalApi } from '@api/LegalApi';
+import { SearchApi } from '@api/SearchApi';
+import LoadingButton from '@components/partials/LoadingButton';
 import LegalsList from './LegalsList';
 
 export default {
-    components: {
-        LegalsList,
-    },
+    components: { LegalsList, LoadingButton },
 
     data() {
         return {
@@ -45,7 +43,7 @@ export default {
         async findLegal() {
             this.loading = true;
             try {
-                const legals = await LegalApi.findLegal({ query: this.query });
+                const legals = await SearchApi.findLegal({ query: this.query });
                 this.legals = legals;
                 this.modal = true;
             } catch (e) {

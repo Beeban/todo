@@ -25,8 +25,10 @@ class LegalService
         return $legal;
     }
 
-    public function updateLegal(Update $request, Legal $legal): Legal
+    public function updateLegal(Update $request, int $id): Legal
     {
+        $legal = Legal::findOrFail($id);
+
         $legal->update($request->all());
         return $legal;
     }

@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DTOs\Legal\LegalCollectionDTO;
 use App\Http\Requests\Legals\Create;
 use App\Http\Requests\Legals\Filter;
+use App\Http\Requests\Legals\Update;
 use App\Services\Legal\LegalService;
-use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Http\Request;
 
 class LegalController extends Controller
@@ -21,7 +20,11 @@ class LegalController extends Controller
     public function index(Filter $request)
     {
         $legals = $this->legalService->getLegals();
-        return view('legal.index', compact('legals'))->withErrors('test');
+        if ($request->ajax()) {
+            return response()->success($legals);
+        } else {
+            return view('legal.index', compact('legals'));
+        }
     }
 
     public function show(Request $request, $id)
@@ -35,9 +38,9 @@ class LegalController extends Controller
         }
     }
 
-    public function update(Update $request, Legal $legal)
+    public function update(Update $request, $id)
     {
-        $legal = $this->legalService->updateLegal($request, $legal);
+        $legal = $this->legalService->updateLegal($request, $id);
 
         if ($request->ajax()) {
             return response()->success($legal);
@@ -55,14 +58,5 @@ class LegalController extends Controller
         } else {
             return view('legal.index');
         }
-    }
-
-    public function findLegal(Request $request)
-    {
-        $query = trim($request->input('query'));
-        $legalsData = DadataSuggest::partyById($query);
-        $legals = LegalCollectionDTO::fromDadataRequest($legalsData);
-
-        return response()->success($legals);
     }
 }

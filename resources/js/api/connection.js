@@ -16,7 +16,7 @@ connection.interceptors.response.use(
         const { data } = response;
 
         if (data.success === false) {
-            data.errors.forEach((err) => Toast.error(err));
+            Toast.error(data.error && data.error.message);
             return Promise.reject();
         }
 
@@ -31,7 +31,7 @@ connection.interceptors.response.use(
             //redirectToAuth();
         }
         //console.log(message);
-        //Toast.error(message);
+        Toast.error(message);
         return Promise.reject(response);
     }
 );

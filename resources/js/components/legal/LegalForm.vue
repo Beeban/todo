@@ -27,17 +27,21 @@
 
         <legal-contacts :contacts="form.contacts" @update="updateContacts"></legal-contacts>
 
-        <b-button type="submit" variant="primary">Сохранить</b-button>
+        <hr />
+        <loading-button :loading="loading" type="submit" variant="primary" class="float-right">Сохранить</loading-button>
     </b-form>
 </template>
 
 <script>
 import LegalContacts from './LegalContacts';
+import LoadingButton from '@components/partials/LoadingButton';
 import { LegalApi } from '@api/LegalApi';
+import { Toast } from '@utils/Toast';
 
 export default {
     components: {
         LegalContacts,
+        LoadingButton,
     },
 
     props: {
@@ -47,6 +51,7 @@ export default {
     data() {
         return {
             form: null,
+            loading: false,
         };
     },
 
@@ -60,8 +65,12 @@ export default {
         },
 
         async submit(event) {
+            this.loading = true;
             event.preventDefault();
             const response = await (this.form.id ? LegalApi.update(this.form) : LegalApi.create(this.form));
+            this.loading = false;
+            Toast.success('Организация обновлена');
+            this.$emit('submit');
         },
     },
 };

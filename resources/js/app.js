@@ -9,6 +9,8 @@ import PageHeading from './components/PageHeading';
 import LegalSearchForm from './components/legal/LegalSearchForm';
 import LegalsTable from './components/legal/LegalsTable';
 
+import LoadingWrapper from '@components/partials/LoadingWrapper';
+
 require('./bootstrap');
 window.Vue = require('vue');
 
@@ -17,6 +19,7 @@ import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
 // Install BootstrapVue
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+Vue.component(LoadingWrapper.name, LoadingWrapper);
 
 const app = new Vue({
     el: '#app',
