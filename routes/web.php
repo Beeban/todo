@@ -16,6 +16,6 @@ use App\Http\Controllers\LegalController;
 
 Route::get('/', [HomeController::class, 'index']);
 
-Route::resource('legals', LegalController::class)->only(['index', 'update', 'store']);
+Route::resource('legals', LegalController::class)->only(['index', 'update', 'store', 'show']);
 
 Route::get('legals/find', [LegalController::class, 'findLegal']);

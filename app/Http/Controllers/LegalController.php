@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\DTOs\Legal\LegalCollectionDTO;
-use App\Http\Requests\LegalRequest;
+use App\Http\Requests\Legals\Create;
+use App\Http\Requests\Legals\Filter;
 use App\Services\Legal\LegalService;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Http\Request;
@@ -17,22 +18,24 @@ class LegalController extends Controller
         $this->legalService = $legalService;
     }
 
-    public function index()
+    public function index(Filter $request)
     {
         $legals = $this->legalService->getLegals();
-        return view('legal.index', compact('legals'));
+        return view('legal.index', compact('legals'))->withErrors('test');
     }
 
-    public function findLegal(Request $request)
+    public function show(Request $request, $id)
     {
-        $query = trim($request->input('query'));
-        $legalsData = DadataSuggest::partyById($query);
-        $legals = LegalCollectionDTO::fromDadataRequest($legalsData);
+        $legal = $this->legalService->getLegal($id);
 
-        return response()->success($legals);
+        if ($request->ajax()) {
+            return response()->success($legal);
+        } else {
+            return view('legals.index', compact('legal'));
+        }
     }
 
-    public function update(LegalRequest $request, Legal $legal)
+    public function update(Update $request, Legal $legal)
     {
         $legal = $this->legalService->updateLegal($request, $legal);
 
@@ -43,7 +46,7 @@ class LegalController extends Controller
         }
     }
 
-    public function store(LegalRequest $request)
+    public function store(Create $request)
     {
         $legal = $this->legalService->createLegal($request);
 
@@ -52,5 +55,14 @@ class LegalController extends Controller
         } else {
             return view('legal.index');
         }
+    }
+
+    public function findLegal(Request $request)
+    {
+        $query = trim($request->input('query'));
+        $legalsData = DadataSuggest::partyById($query);
+        $legals = LegalCollectionDTO::fromDadataRequest($legalsData);
+
+        return response()->success($legals);
     }
 }

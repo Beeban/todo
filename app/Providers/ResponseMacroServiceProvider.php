@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
 use Throwable;
@@ -13,7 +14,23 @@ class ResponseMacroServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(ResponseFactory $factory)
+    public function boot(ResponseFactory $responseFactory, ViewFactory $viewFactory)
+    {
+        $this->extendResponseFactory($responseFactory);
+        $this->extendViewFactory($viewFactory);
+    }
+
+    /**
+     * Register services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        //
+    }
+
+    private function extendResponseFactory(ResponseFactory $factory)
     {
         $factory->macro('success', function ($data = []) use ($factory) {
             $pagination = [];
@@ -56,13 +73,10 @@ class ResponseMacroServiceProvider extends ServiceProvider
         });
     }
 
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
+    private function extendViewFactory(ViewFactory $factory)
     {
-        //
+        $factory->macro('error', function ($error) use ($factory) {
+            return $factory->share('error', $error);
+        });
     }
 }

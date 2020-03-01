@@ -1,5 +1,5 @@
 <template>
-    <b-row>
+    <div>
         <b-input-group prepend="Добавить" class="mt-3">
             <b-form-input
                 autocomplete="on"
@@ -20,7 +20,7 @@
         <b-modal v-model="modal" title="Список организаций" size="lg" hide-footer>
             <legals-list :legals="legals"></legals-list>
         </b-modal>
-    </b-row>
+    </div>
 </template>
 
 <script>

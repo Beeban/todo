@@ -1,7 +1,8 @@
 <?php
 namespace App\Services\Legal;
 
-use App\Http\Requests\LegalRequest;
+use App\Http\Requests\Legals\Update;
+use App\Http\Requests\Legal\Create;
 use App\Legal;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -13,15 +14,20 @@ class LegalService
         return Legal::with('signer')->get();
     }
 
-    public function createLegal(LegalRequest $request): Legal
+    public function getLegal(int $id): Legal
+    {
+        return Legal::with('contacts')->findOrFail($id);
+    }
+
+    public function createLegal(Create $request): Legal
     {
         $legal = Legal::create($request->all());
         return $legal;
     }
 
-    public function updateLegal(LegalRequest $request, Legal $legal): Legal
+    public function updateLegal(Update $request, Legal $legal): Legal
     {
-        $legal = Legal::update($request->all());
+        $legal->update($request->all());
         return $legal;
     }
 }

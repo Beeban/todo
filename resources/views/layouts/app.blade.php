@@ -16,6 +16,7 @@
         <topmenu></topmenu>
         <b-container class="bg-white shadow-sm">
             <div class="px-3 py-3">
+                @include('layouts.partials.flash')
                 @yield('content')
             </div>
         </b-container>

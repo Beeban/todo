@@ -6,10 +6,12 @@
 
 <div>
     <hr>
-    <legal-search-form></legal-search-form>
-    <hr>
+    <b-row>
+        <legal-search-form class="col"></legal-search-form>
+    </b-row>
+    <br>
     @if($legals->count())
-    <legals-table :legals="{{json_encode($legals)}}"></legals-table>
+    <legals-table class="col" :legals="{{json_encode($legals)}}"></legals-table>
     @else
 
     @endif
