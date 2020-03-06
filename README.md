@@ -1,1 +1,0 @@
-## Laravel 6.2 Test app
