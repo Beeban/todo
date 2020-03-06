@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\DTOs\Legal\LegalCollectionDTO;
+use App\Http\Controllers\Controller;
 use Exception;
 use Fomvasss\Dadata\Facades\DadataSuggest;
 use Illuminate\Http\Request;

@@ -11,6 +11,7 @@
         "php": "^7.2",
         "fideloper/proxy": "^4.0",
         "fomvasss/laravel-dadata": "^2.2",
+        "fruitcake/laravel-cors": "^1.0",
         "ixudra/curl": "^6.18",
         "laravel/framework": "^7.0",
         "laravel/tinker": "^2.0",

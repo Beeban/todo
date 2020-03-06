@@ -1,37 +1,27 @@
-import axios from 'axios';
-import { Toast } from '@utils/Toast';
+export default function({ $axios, app }) {
+    const API_URL = process.env.API_DOMAIN + '/' + process.env.API_ENDPOINT;
 
-const domain = process.env.MIX_API_DOMAIN;
+    $axios.setHeader('X-Requested-With', 'XMLHttpRequest');
+    $axios.setBaseURL(API_URL);
 
-export const connection = axios.create({
-    //withCredentials: true,
-    baseURL: ``,
-    headers: {
-        'X-Requested-With': 'XMLHttpRequest',
-    },
-});
-
-connection.interceptors.response.use(
-    (response) => {
+    $axios.onResponse((response) => {
         const { data } = response;
 
         if (data.success === false) {
-            Toast.error(data.error && data.error.message);
+            app.$toast.error(data.error && data.error.message);
             return Promise.reject();
         }
 
         if (data.message) {
-            //Toast.success(data.message);
+            app.$toast.success(data.message);
         }
 
         return response;
-    },
-    ({ response, message }) => {
+    });
+
+    $axios.onError(({ response, message }) => {
         if (response.status === 401) {
             //redirectToAuth();
         }
-        //console.log(message);
-        Toast.error(message);
-        return Promise.reject(response);
-    }
-);
+    });
+}

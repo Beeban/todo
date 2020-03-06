@@ -1,76 +1,97 @@
 <template>
-    <b-form @submit="submit">
+    <b-form @submit.prevent="submit">
         <b-row>
-            <b-form-group label-size="sm" class="col-md-12" label="Полное наименование">
-                <b-form-input size="sm" v-model="form.full_name" required></b-form-input>
-            </b-form-group>
-            <b-form-group label-size="sm" class="col-md-12" label="Наименование">
-                <b-form-input size="sm" v-model="form.name" required></b-form-input>
-            </b-form-group>
-            <b-form-group label-size="sm" class="col-md-12" label="Адрес">
-                <b-form-input size="sm" v-model="form.address" required></b-form-input>
-            </b-form-group>
+            <base-input
+                label="Полное наименование"
+                class="col-md-12"
+                :value="legal.full_name"
+                @change="(full_name) => updateStore({ full_name })"
+                required
+            ></base-input>
 
-            <b-form-group label="ИНН" class="col-md-6" label-size="sm">
-                <b-form-input size="sm" v-model="form.inn" required></b-form-input>
-            </b-form-group>
-            <b-form-group label="ОГРН" class="col-md-6" label-size="sm">
-                <b-form-input size="sm" v-model="form.ogrn" required></b-form-input>
-            </b-form-group>
-            <b-form-group label="КПП" class="col-md-6" label-size="sm">
-                <b-form-input size="sm" v-model="form.kpp"></b-form-input>
-            </b-form-group>
-            <b-form-group label="ОПП" class="col-md-6" label-size="sm">
-                <b-form-input size="sm" v-model="form.opp"></b-form-input>
-            </b-form-group>
+            <base-input
+                label="Наименование"
+                class="col-md-12"
+                size="sm"
+                :value="legal.name"
+                @change="(name) => updateStore({ name })"
+                required
+            ></base-input>
+
+            <base-input
+                label="Адрес"
+                class="col-md-12"
+                size="sm"
+                :value="legal.address"
+                @change="(address) => updateStore({ address })"
+                required
+            ></base-input>
+
+            <base-input
+                label="ИНН"
+                class="col-md-6"
+                size="sm"
+                :value="legal.inn"
+                @change="(inn) => updateStore({ inn })"
+                required
+            ></base-input>
+
+            <base-input
+                label="ОГРН"
+                class="col-md-6"
+                size="sm"
+                :value="legal.ogrn"
+                @change="(ogrn) => updateStore({ ogrn })"
+                required
+            ></base-input>
+
+            <base-input label="КПП" class="col-md-6" size="sm" :value="legal.kpp" @change="(kpp) => updateStore({ kpp })"></base-input>
+
+            <base-input label="ОПП" class="col-md-6" size="sm" :value="legal.opp" @change="(opp) => updateStore({ opp })"></base-input>
         </b-row>
 
-        <legal-contacts :contacts="form.contacts" @update="updateContacts"></legal-contacts>
+        <legal-contacts :contacts="legal.contacts" @change="(contacts) => updateStore({ contacts })"></legal-contacts>
 
         <hr />
-        <loading-button :loading="loading" type="submit" variant="primary" class="float-right">Сохранить</loading-button>
+        <loading-button :loading="pending" type="submit" variant="primary" class="float-right">Сохранить</loading-button>
     </b-form>
 </template>
 
 <script>
 import LegalContacts from './LegalContacts';
-import LoadingButton from '@components/partials/LoadingButton';
 import { LegalApi } from '@api/LegalApi';
-import { Toast } from '@utils/Toast';
 
 export default {
     components: {
         LegalContacts,
-        LoadingButton,
     },
 
-    props: {
-        legal: Object,
+    async fetch({ store, route }) {
+        await store.dispatch('legals/GET', route.params.id);
+    },
+
+    computed: {
+        legal() {
+            return this.$store.state.legals.current;
+        },
     },
 
     data() {
         return {
-            form: null,
-            loading: false,
+            pending: false,
         };
     },
 
-    created() {
-        this.form = { ...this.legal };
-    },
-
     methods: {
-        updateContacts(contacts) {
-            this.form.contacts = contacts;
+        updateStore(value) {
+            this.$store.dispatch('legals/UPDATE', { ...this.legal, ...value });
         },
 
         async submit(event) {
-            this.loading = true;
-            event.preventDefault();
-            const response = await (this.form.id ? LegalApi.update(this.form) : LegalApi.create(this.form));
-            this.loading = false;
-            Toast.success('Организация обновлена');
-            this.$emit('submit');
+            this.pending = true;
+            await this.$store.dispatch('legals/SUBMIT');
+            this.$router.push('/legals');
+            this.pending = false;
         },
     },
 };

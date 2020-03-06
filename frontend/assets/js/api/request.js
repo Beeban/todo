@@ -3,11 +3,15 @@ import { remapPagination } from '@utils/helpers';
 const isPaginatedResponse = (response) => response.pagination && response.pagination.length;
 
 export const handleRequest = async (response) => {
-    const { data } = await response;
+    try {
+        const { data } = await response;
 
-    if (isPaginatedResponse(data)) {
-        return { data: data.payload, pagination: remapPagination(data.pagination) };
+        if (isPaginatedResponse(data)) {
+            return { payload: data.payload, pagination: remapPagination(data.pagination) };
+        }
+
+        return data;
+    } catch (exception) {
+        throw exception;
     }
-
-    return data.payload;
 };

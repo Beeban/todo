@@ -1,6 +1,10 @@
 <template>
     <div>
-        <b-input-group prepend="Добавить" class="mt-3">
+        <b-input-group class="mt-3">
+            <b-input-group-prepend>
+                <b-button :disabled="!legals.length" @click="popover = !popover" variant="success">Добавить</b-button>
+            </b-input-group-prepend>
+
             <b-form-input
                 autocomplete="on"
                 v-model="query"
@@ -9,50 +13,52 @@
                 @keyup.enter="findLegal"
                 placeholder="введите ИНН или ОГРН"
             ></b-form-input>
+
             <b-input-group-append>
-                <loading-button :loading="loading" :disabled="!query" @click="findLegal" variant="primary ">
+                <loading-button :loading="pending" :disabled="!query" @click="findLegal" variant="primary ">
                     <b-icon icon="search"></b-icon>
                 </loading-button>
             </b-input-group-append>
         </b-input-group>
 
-        <b-modal v-model="modal" title="Список организаций" size="lg" hide-footer>
-            <legals-list :legals="legals"></legals-list>
-        </b-modal>
+        <b-card no-body v-if="popover" inline class="position-absolute zindex-dropdown">
+            <b-list-group>
+                <b-list-group-item button v-for="(legal, index) in legals" :key="index" @click="() => handleClick(legal)">
+                    <h6>{{ legal.name }}</h6>
+                    <small>{{ legal.address }}</small>
+                </b-list-group-item>
+            </b-list-group>
+        </b-card>
     </div>
 </template>
 
 <script>
-import { SearchApi } from '@api/SearchApi';
-import LoadingButton from '@components/partials/LoadingButton';
-import LegalsList from './LegalsList';
-
 export default {
-    components: { LegalsList, LoadingButton },
-
     data() {
         return {
             query: '',
-            modal: false,
+            popover: false,
             legals: [],
-            loading: false,
+            pending: false,
         };
     },
 
     methods: {
         async findLegal() {
-            this.loading = true;
+            this.pending = true;
             try {
-                const legals = await SearchApi.findLegal({ query: this.query });
-                this.legals = legals;
-                this.modal = true;
+                const { payload } = await this.$api.search.findLegal({ query: this.query });
+                this.legals = payload;
+                this.popover = true;
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             }
-            this.loading = false;
+            this.pending = false;
+        },
+        handleClick(legal) {
+            this.popover = false;
+            this.$emit('select', legal);
         },
     },
 };
 </script>
-
-<style lang="scss" scoped></style>

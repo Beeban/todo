@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h4>{{ title }}</h4>
+        <h2>{{ title }}</h2>
         <div v-if="$slots.default" class="float-right">
             <slot></slot>
         </div>

@@ -1,0 +1,25 @@
+@import './variables.scss';
+@import './helpers.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap-vue/src/index.scss';
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+body {
+    background: whitesmoke;
+}
+
+.page-enter-active {
+    transition: opacity 0.25s ease-out;
+}
+
+.page-leave-active {
+    transition: opacity 0.25s ease-in;
+}
+
+.page-enter,
+.page-leave-active {
+    opacity: 0;
+}

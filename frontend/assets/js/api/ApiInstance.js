@@ -1,16 +1,23 @@
-import { connection } from '@api/connection';
 import { handleRequest } from '@api/request';
 
-export class ApiInstance {
+export default class ApiInstance {
     baseUrl;
+    _connection;
 
-    getAll = async (params = {}) => handleRequest(connection.get(`${this.baseUrl}`, { params }));
+    constructor(connection, url = '') {
+        if (url) {
+            this.baseUrl = url;
+        }
+        this._connection = connection;
+    }
 
-    get = async (id, params = {}) => handleRequest(connection.get(`${this.baseUrl}/${id}`, { params }));
+    getAll = async (params = {}) => handleRequest(this._connection.get(`${this.baseUrl}`, { params }));
 
-    create = async (model) => handleRequest(connection.post(`${this.baseUrl}`, model));
+    get = async (id, params = {}) => handleRequest(this._connection.get(`${this.baseUrl}/${id}`, { params }));
 
-    update = async (model) => handleRequest(connection.patch(`${this.baseUrl}/${model.id}`, model));
+    create = async (model) => handleRequest(this._connection.post(`${this.baseUrl}`, model));
 
-    delete = async ({ id }) => handleRequest(connection.delete(`${this.baseUrl}/${id}`));
+    update = async (model) => handleRequest(this._connection.patch(`${this.baseUrl}/${model.id}`, model));
+
+    delete = async ({ id }) => handleRequest(this._connection.delete(`${this.baseUrl}/${id}`));
 }

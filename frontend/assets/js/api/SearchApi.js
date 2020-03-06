@@ -1,11 +1,8 @@
-import { ApiInstance } from './ApiInstance';
+import ApiInstance from './ApiInstance';
 import { handleRequest } from './request';
-import { connection } from './connection';
 
-class SearchApiInstance extends ApiInstance {
+export class SearchApi extends ApiInstance {
     baseUrl = 'search';
 
-    findLegal = async (params) => await handleRequest(connection.get(`${this.baseUrl}/legal`, { params }));
+    findLegal = async (params) => await handleRequest(this._connection.get(`${this.baseUrl}/legal`, { params }));
 }
-
-export const SearchApi = new SearchApiInstance();
