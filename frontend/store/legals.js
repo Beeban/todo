@@ -5,6 +5,7 @@ export const state = () => ({
     filter: {},
     fetchAllStatus: fetchStatus.NONE,
     current: {},
+    validationErrors: {},
     fetchCurrentStatus: fetchStatus.NONE,
 });
 
@@ -50,7 +51,9 @@ export const actions = {
 
             commit('SET_CURRENT', payload);
         } catch (exception) {
-            commit('SET_CURRENT_STATUS', fetchStatus.ERROR);
+            const errors = exception.response?.data?.errors || {};
+            commit('SET_CURRENT_ERROR', errors);
+            throw exception;
         }
     },
 
@@ -84,5 +87,11 @@ export const mutations = {
 
     SET_CURRENT_STATUS(state, status) {
         state.fetchCurrentStatus = status;
+        state.validationErrors = {};
+    },
+
+    SET_CURRENT_ERROR(state, errors) {
+        state.fetchCurrentStatus = fetchStatus.ERROR;
+        state.validationErrors = errors;
     },
 };

@@ -17,6 +17,6 @@ class Legal extends Model
 
     public function signer()
     {
-        return $this->hasOne(LegalContacts::class, 'id', 'signer_id');
+        return $this->belongsTo(LegalContacts::class, 'signer_id', 'id');
     }
 }

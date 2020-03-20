@@ -10,8 +10,13 @@ class LegalContacts extends Model
 
     protected $fillable = ['name', 'position', 'phone', 'email', 'legal_id'];
 
-    public function contacts()
+    public function legal()
     {
-        return $this->belongsTo(LegalContacts::class, 'legal_id', 'id');
+        return $this->hasOne(Legal::class, 'id', 'legal_id');
+    }
+
+    public function getIsSignerAttribute()
+    {
+        return $this->legal->signer_id === $this->id;
     }
 }

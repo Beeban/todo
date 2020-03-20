@@ -28,7 +28,7 @@
                     <b-input size="sm" :value="contact.email" @input="(name) => updateValue({ name }, index)"></b-input>
                 </b-td>
                 <b-td>
-                    <b-radio name="signer"></b-radio>
+                    <b-radio value="true" :checked="contact.is_signer" name="signer" @change="() => changeSigner(index)"></b-radio>
                 </b-td>
                 <b-td>
                     <b-button size="sm" variant="danger" @click="() => deleteContact(index)">
@@ -61,17 +61,25 @@ export default {
     methods: {
         updateValue(value, index) {
             const contacts = this.contacts.map((contact, contactIndex) => (contactIndex === index ? { ...contact, ...value } : contact));
-            this.$emit('update', contacts);
+            this.$emit('change', contacts);
         },
 
         addContact() {
             const contacts = [...this.contacts, emptyContact];
-            this.$emit('update', contacts);
+            this.$emit('change', contacts);
         },
 
         deleteContact(index) {
             const contacts = this.contacts.filter((_, contactIndex) => index !== contactIndex);
-            this.$emit('update', contacts);
+            this.$emit('change', contacts);
+        },
+
+        changeSigner(index) {
+            const contacts = this.contacts.map((params, contactIndex) => {
+                const contact = { ...params, is_signer: index === contactIndex };
+                return contact;
+            });
+            this.$emit('change', contacts);
         },
     },
 };

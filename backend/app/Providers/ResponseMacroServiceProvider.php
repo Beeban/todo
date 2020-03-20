@@ -49,7 +49,9 @@ class ResponseMacroServiceProvider extends ServiceProvider
                 }
             }
 
-            if (method_exists($data, 'toArray')) {
+            if (method_exists($data, 'resolve')) {
+                $data = $data->resolve(true);
+            } elseif (method_exists($data, 'toArray')) {
                 $data = $data->toArray(true);
             }
 

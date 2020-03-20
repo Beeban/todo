@@ -26,8 +26,11 @@ export default {
     },
 
     methods: {
-        clearFilter() {
+        async clearFilter() {
+            this.pending = true;
             this.$store.dispatch('legals/SET_FILTER', {});
+            await this.$store.dispatch('legals/GET_ALL', true);
+            this.pending = false;
         },
         updateFilter(value) {
             this.$store.dispatch('legals/SET_FILTER', { ...this.filter, ...value });

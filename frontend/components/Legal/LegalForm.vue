@@ -1,5 +1,6 @@
 <template>
     <b-form @submit.prevent="submit">
+        <validation-errors :errors="validationErrors"></validation-errors>
         <b-row>
             <base-input
                 label="Полное наименование"
@@ -60,6 +61,7 @@
 <script>
 import LegalContacts from './LegalContacts';
 import { LegalApi } from '@api/LegalApi';
+import { mapState } from 'vuex';
 
 export default {
     components: {
@@ -71,9 +73,10 @@ export default {
     },
 
     computed: {
-        legal() {
-            return this.$store.state.legals.current;
-        },
+        ...mapState({
+            legal: (state) => state.legals.current,
+            validationErrors: (state) => state.legals.validationErrors,
+        }),
     },
 
     data() {
@@ -89,8 +92,12 @@ export default {
 
         async submit(event) {
             this.pending = true;
-            await this.$store.dispatch('legals/SUBMIT');
-            this.$router.push('/legals');
+            try {
+                await this.$store.dispatch('legals/SUBMIT');
+                this.$router.push('/legals');
+            } catch (e) {
+                //
+            }
             this.pending = false;
         },
     },
